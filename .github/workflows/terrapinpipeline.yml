@@ -1,0 +1,23 @@
+name: Terrapin Package Build
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@master
+      name: Checkout source
+
+    - name: Build package with Oryx
+      run:  docker run --volume $(pwd):/repo --volume /home/runner/outputfolder:/output mcr.microsoft.com/oryx/build:latest oryx build --package /repo --output /output -p registry=https://pkgs.dev.azure.com/corm0997/TerrapinTest/_packaging/terrapin-test/npm/registry/
+
+    - uses: jikuma/githubaction@v0.3.3-alpha
+      name: Create release
+      with:
+        operation: 'create a release'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        release_title: 'Terrapin release'
+        release_note: 'Job: 44813d4e-886a-4580-9a18-a43ab9d3aee4 | Package: lodash@4.17.10 | Manager: Npm | Commit: ${{ github.sha }}'
+        asset_filepath: '/home/runner/outputfolder/lodash-4.17.10.tgz'
+        tag_name: v4.17.10+${{ github.sha }}
