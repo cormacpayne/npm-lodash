@@ -1,0 +1,23 @@
+name: Terrapin Package Build
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@master
+      name: Checkout source
+
+    - name: Build package with Oryx
+      run:  docker run --volume $(pwd):/repo --volume /home/runner/outputfolder:/output --env PRE_BUILD_COMMAND='curl -O https://gist.githubusercontent.com/dorfire/77a7e7b566fe6caad5c9c6b887b5ec67/raw/368b06f89d7d638b641cf93c5f73be34109a4c12/clean-package-lock.js && node clean-package-lock.js' mcr.microsoft.com/oryx/build:latest oryx build --package /repo --output /output -p registry=http:///api/registry
+
+    - uses: jikuma/githubaction@v0.3.3-alpha
+      name: Create release
+      with:
+        operation: 'create a release'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        release_title: 'Terrapin release'
+        release_note: 'Job: fefc0b0c-2f36-4039-8196-d66a8bfecd97 | Package: lodash@4.17.13 | Manager: Npm | Commit: ${{ github.sha }}'
+        asset_filepath: '/home/runner/outputfolder/lodash-4.17.13.tgz'
+        tag_name: v4.17.13+${{ github.sha }}
