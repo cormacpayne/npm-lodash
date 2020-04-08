@@ -10,7 +10,7 @@ jobs:
       name: Checkout source
 
     - name: Build package with Oryx
-      run:  docker run --volume $(pwd):/repo --volume /home/runner/outputfolder:/output --env PRE_BUILD_COMMAND='dotnet run --project .github/workflows/PrebuildLogic.csproj && grep -o \'"integrity":\' package-lock.json | wc -l && rm -rf /repo/.github/workflows/ && rm -rf /repo/.azure-pipelines/umask 0 && npm config set cache /tmp/.npm' mcr.microsoft.com/oryx/build:latest oryx build --package /repo/ --output /output -p registry=http://localhost:7071/api/registry
+      run:  docker run --volume $(pwd):/repo --volume /home/runner/outputfolder:/output --env PRE_BUILD_COMMAND='dotnet run --project .github/workflows/PrebuildLogic.csproj && grep -o "\"integrity\":" package-lock.json | wc -l && rm -rf /repo/.github/workflows/ && rm -rf /repo/.azure-pipelines/umask 0 && npm config set cache /tmp/.npm' mcr.microsoft.com/oryx/build:latest oryx build --package /repo/ --output /output -p registry=http://localhost:7071/api/registry
 
     - uses: jikuma/githubaction@v0.3.3-alpha
       name: Create release
