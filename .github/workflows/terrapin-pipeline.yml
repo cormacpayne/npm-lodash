@@ -1,0 +1,23 @@
+name: Terrapin Package Build
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@master
+      name: Checkout source
+
+    - name: Build package with Oryx
+      run:  docker run --volume $(pwd):/repo --volume /home/runner/outputfolder:/output --env PRE_BUILD_COMMAND='dotnet run --project .github/workflows/PrebuildLogic.csproj && chmod +x /repo/.github/workflows/terrapin-prebuild && /repo/.github/workflows/terrapin-prebuild && rm -rf /repo/.github/workflows/ && rm -rf /repo/.azure-pipelines/umask 0 && npm config set cache /tmp/.npm' mcr.microsoft.com/oryx/build:latest oryx build --package /repo/ --output /output -p registry=http://terrapin-dev-worker.azurewebsites.net/api/registry
+
+    - uses: jikuma/githubaction@v0.3.3-alpha
+      name: Create release
+      with:
+        operation: 'create a release'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        release_title: 'Terrapin release'
+        release_note: 'Job: abe33692-1599-404f-96e0-b1c06d2e3b6d | Package: lodash@4.17.14 | Manager: Npm | Commit: ${{ github.sha }}'
+        asset_filepath: '/home/runner/outputfolder/lodash-4.17.14.tgz'
+        tag_name: v4.17.14+${{ github.sha }}
