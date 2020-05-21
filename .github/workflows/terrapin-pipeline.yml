@@ -20,9 +20,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v4.17.15+${{ github.sha }}
-        release_name: '[Terrapin] v4.17.15'
-        body: 'Job: 46deb060-5845-4005-ac93-3417164c6368 | Package: lodash-es@4.17.15 | Manager: Npm | Commit: ${{ github.sha }}'
+        tag_name: v4.17.15-test+${{ github.sha }}
+        release_name: '[Terrapin] v4.17.15-test'
+        body: 'Job: 46deb060-5845-4005-ac93-3417164c6368 | Package: lodash@4.17.15 | Manager: Npm | Commit: ${{ github.sha }}'
         draft: false
         prerelease: false
 
@@ -32,6 +32,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/outputfolder/lodash-es-4.17.15.tgz
-        asset_name: lodash-es-4.17.15.tgz
+        asset_path: /home/runner/outputfolder/lodash-4.17.15.tgz
+        asset_name: lodash-4.17.15.tgz
         asset_content_type: application/gzip
