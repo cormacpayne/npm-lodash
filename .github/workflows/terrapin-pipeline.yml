@@ -21,7 +21,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v4.17.15+${{ github.sha }}
-        release-name: '[Terrapin] v4.17.15'
+        release_name: '[Terrapin] v4.17.15'
         body: 'Job: 46deb060-5845-4005-ac93-3417164c6368 | Package: lodash-es@4.17.15 | Manager: Npm | Commit: ${{ github.sha }}'
         draft: false
         prerelease: false
