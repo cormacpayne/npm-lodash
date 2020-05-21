@@ -1,6 +1,8 @@
 name: Terrapin Package Build
 
-on: [push, repository_dispatch]
+on:
+  watch:
+    types: [started]
 
 jobs:
   build:
